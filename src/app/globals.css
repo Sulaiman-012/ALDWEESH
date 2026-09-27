@@ -1,0 +1,62 @@
+@import "tailwindcss";
+
+:root {
+  --bg: #f6f7f9;
+  --panel: #ffffff;
+  --primary: #0f6b4c;
+  --primary-dark: #0a4d37;
+  --accent: #b8860b;
+  --text: #1c2530;
+  --muted: #6b7684;
+  --border: #e3e6ea;
+}
+
+@theme inline {
+  --color-background: var(--bg);
+  --color-foreground: var(--text);
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: "IBM Plex Sans Arabic", "Cairo", Tahoma, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+h1, h2, h3, h4 { font-family: "Cairo", "IBM Plex Sans Arabic", sans-serif; }
+
+.btn-primary {
+  display: inline-block;
+  background: var(--primary);
+  color: #fff;
+  border-radius: 0.6rem;
+  padding: 0.55rem 1.1rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+.btn-primary:hover { background: var(--primary-dark); }
+
+.btn-ghost {
+  display: inline-block;
+  background: #fff;
+  color: var(--primary-dark);
+  border: 1px solid var(--border);
+  border-radius: 0.6rem;
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.card {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 0.9rem;
+  padding: 1.1rem;
+}
+
+table.data-table { width: 100%; border-collapse: collapse; font-size: 0.875rem; }
+table.data-table th, table.data-table td { text-align: right; padding: 0.6rem 0.7rem; border-bottom: 1px solid var(--border); }
+table.data-table th { color: var(--muted); font-weight: 600; font-size: 0.8rem; }
