@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 interface AccountOption {
   id: string;
@@ -52,6 +53,14 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-[var(--bg)] px-4">
       <div className="w-full max-w-sm bg-[var(--panel)] rounded-2xl shadow-lg p-8 border border-[var(--border)]">
+        <Image
+          src="/logo.webp"
+          alt="شعار عائلة الدويش"
+          width={160}
+          height={87}
+          className="mx-auto mb-3 h-14 w-auto"
+          priority
+        />
         <h1 className="text-xl font-bold text-center mb-1" style={{ color: "var(--primary-dark)" }}>
           صندوق عائلة الدويش
         </h1>
