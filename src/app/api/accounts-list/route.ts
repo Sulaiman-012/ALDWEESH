@@ -1,13 +1,14 @@
 import { NextResponse } from "next/server";
 import { getSupabaseAdmin } from "@/lib/supabaseAdmin";
 
-// قائمة الأسماء فقط (بدون أي بيانات حساسة) لتعبئة قائمة الدخول
+// قائمة الأكواد الوظيفية فقط (بدون الاسم) لتعبئة قائمة الدخول — حماية للخصوصية
 export async function GET() {
   const supabase = getSupabaseAdmin();
   const { data, error } = await supabase
     .from("accounts")
-    .select("id,name")
-    .order("name", { ascending: true });
+    .select("id,job_code")
+    .not("job_code", "is", null)
+    .order("job_code", { ascending: true });
 
   if (error) {
     return NextResponse.json({ error: error.message }, { status: 500 });

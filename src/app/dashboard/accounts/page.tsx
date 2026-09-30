@@ -4,6 +4,7 @@ import { getSupabaseAdmin } from "@/lib/supabaseAdmin";
 import NewAccountForm from "./NewAccountForm";
 import AccountRow from "./AccountRow";
 import GrantsManager from "./GrantsManager";
+import GenerateJobCodesButton from "./GenerateJobCodesButton";
 
 export default async function AccountsPage() {
   const session = await getSession();
@@ -22,7 +23,7 @@ export default async function AccountsPage() {
   const supabase = getSupabaseAdmin();
   const { data: accounts } = await supabase
     .from("accounts")
-    .select("id,name,phone,is_admin,is_trustee,is_executive,is_executive_head")
+    .select("id,name,phone,job_code,is_admin,is_trustee,is_executive,is_executive_head")
     .order("name");
   const { data: committees } = await supabase.from("committees").select("id,name").order("name");
   const { data: grantsRaw } = await supabase
@@ -42,10 +43,11 @@ export default async function AccountsPage() {
       <div>
         <h1 className="text-xl font-bold mb-4" style={{ color: "var(--primary-dark)" }}>👥 الحسابات</h1>
         <NewAccountForm />
+        <GenerateJobCodesButton />
         <div className="card overflow-x-auto">
           <table className="data-table">
             <thead>
-              <tr><th>الاسم</th><th>الجوال</th><th>الصلاحيات</th><th>إجراءات</th></tr>
+              <tr><th>الاسم</th><th>الكود الوظيفي</th><th>الجوال</th><th>الصلاحيات</th><th>إجراءات</th></tr>
             </thead>
             <tbody>
               {(accounts || []).map((a) => <AccountRow key={a.id} account={a} />)}

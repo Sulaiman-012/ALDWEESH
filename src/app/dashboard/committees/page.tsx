@@ -2,6 +2,7 @@ import { getSession } from "@/lib/session";
 import { buildScope } from "@/lib/scope";
 import { getSupabaseAdmin } from "@/lib/supabaseAdmin";
 import EvaluationSection from "./EvaluationSection";
+import CommitteeCodeForm from "./CommitteeCodeForm";
 
 export default async function CommitteesPage() {
   const session = await getSession();
@@ -9,7 +10,7 @@ export default async function CommitteesPage() {
   if (!scope) return null;
 
   const supabase = getSupabaseAdmin();
-  let query = supabase.from("committees").select("id,name,purpose").order("name");
+  let query = supabase.from("committees").select("id,name,purpose,code_prefix").order("name");
   if (!scope.viewAll) {
     if (scope.viewCommitteeIds.length === 0) {
       return (
@@ -69,6 +70,9 @@ export default async function CommitteesPage() {
               evaluations={evalsByCommittee[c.id] || []}
               canEvaluate={canEvaluate}
             />
+            {scope.isAdmin && (
+              <CommitteeCodeForm committeeId={c.id} codePrefix={(c as any).code_prefix || ""} />
+            )}
           </div>
         ))}
       </div>

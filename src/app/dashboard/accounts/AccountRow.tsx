@@ -4,7 +4,7 @@ import { useRef, useState, useTransition } from "react";
 import { updateAccountFlags, resetPin, deleteAccount } from "./actions";
 
 interface Account {
-  id: string; name: string; phone: string | null;
+  id: string; name: string; phone: string | null; job_code: string | null;
   is_admin: boolean; is_trustee: boolean; is_executive: boolean; is_executive_head: boolean;
 }
 
@@ -14,11 +14,13 @@ export default function AccountRow({ account }: { account: Account }) {
   const [editing, setEditing] = useState(false);
   const [pending, startTransition] = useTransition();
   const [pinMsg, setPinMsg] = useState("");
+  const [formError, setFormError] = useState("");
 
   if (!editing) {
     return (
       <tr>
         <td>{account.name}</td>
+        <td className="text-xs font-mono">{account.job_code || "—"}</td>
         <td>{account.phone || "—"}</td>
         <td className="text-xs">
           {account.is_admin && "مشرف النظام · "}
@@ -58,13 +60,18 @@ export default function AccountRow({ account }: { account: Account }) {
 
   return (
     <tr>
-      <td colSpan={4}>
+      <td colSpan={5}>
         <form
           ref={formRef}
           className="flex flex-wrap items-center gap-2 py-2"
           action={(fd) => {
+            setFormError("");
             startTransition(async () => {
-              await updateAccountFlags(fd);
+              const res = await updateAccountFlags(fd);
+              if (res?.error) {
+                setFormError(res.error);
+                return;
+              }
               setEditing(false);
               router.refresh();
             });
@@ -72,6 +79,12 @@ export default function AccountRow({ account }: { account: Account }) {
         >
           <input type="hidden" name="id" value={account.id} />
           <input name="name" defaultValue={account.name} className="border border-[var(--border)] rounded-md px-2 py-1 text-sm w-36" />
+          <input
+            name="jobCode"
+            defaultValue={account.job_code || ""}
+            placeholder="الكود الوظيفي"
+            className="border border-[var(--border)] rounded-md px-2 py-1 text-sm w-24 uppercase"
+          />
           <input name="phone" defaultValue={account.phone || ""} placeholder="الجوال" className="border border-[var(--border)] rounded-md px-2 py-1 text-sm w-32" />
           <label className="flex items-center gap-1 text-xs"><input type="checkbox" name="isAdmin" defaultChecked={account.is_admin} /> مشرف</label>
           <label className="flex items-center gap-1 text-xs"><input type="checkbox" name="isTrustee" defaultChecked={account.is_trustee} /> مجلس أمناء</label>
@@ -79,6 +92,7 @@ export default function AccountRow({ account }: { account: Account }) {
           <label className="flex items-center gap-1 text-xs"><input type="checkbox" name="isExecutiveHead" defaultChecked={account.is_executive_head} /> رئيسها</label>
           <button type="submit" disabled={pending} className="btn-primary text-xs px-2 py-1">حفظ</button>
           <button type="button" className="btn-ghost text-xs px-2 py-1" onClick={() => setEditing(false)}>إلغاء</button>
+          {formError && <span className="text-xs text-red-600 w-full">{formError}</span>}
         </form>
       </td>
     </tr>

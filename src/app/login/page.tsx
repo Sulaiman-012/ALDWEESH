@@ -6,7 +6,7 @@ import Image from "next/image";
 
 interface AccountOption {
   id: string;
-  name: string;
+  job_code: string;
 }
 
 export default function LoginPage() {
@@ -27,7 +27,7 @@ export default function LoginPage() {
   async function submit() {
     setError("");
     if (!accountId) {
-      setError("الرجاء اختيار اسمك");
+      setError("الرجاء اختيار الكود الوظيفي");
       return;
     }
     if (pin.trim().length !== 4) {
@@ -66,16 +66,16 @@ export default function LoginPage() {
         </h1>
         <p className="text-center text-sm text-[var(--muted)] mb-6">تسجيل الدخول إلى لوحة المهام</p>
 
-        <label className="block text-sm mb-1 font-medium">الاسم</label>
+        <label className="block text-sm mb-1 font-medium">الكود الوظيفي</label>
         <select
           className="w-full mb-4 border border-[var(--border)] rounded-lg px-3 py-2 bg-white"
           value={accountId}
           onChange={(e) => setAccountId(e.target.value)}
         >
-          <option value="">— اختر اسمك —</option>
+          <option value="">— اختر الكود الوظيفي —</option>
           {accounts.map((a) => (
             <option key={a.id} value={a.id}>
-              {a.name}
+              {a.job_code}
             </option>
           ))}
         </select>
